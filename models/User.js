@@ -95,7 +95,7 @@ const userSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
