@@ -95,7 +95,19 @@ const userSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
+const bcrypt = require("bcrypt");
 
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 // Index for faster queries
 userSchema.index({ mobile: 1 });
 userSchema.index({ email: 1 });
